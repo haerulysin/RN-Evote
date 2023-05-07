@@ -3,18 +3,24 @@ import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { AntDesign, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { View, Text, Button, ImageBackground } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+
 
 //Screen
-import ProfileScreens from './src/screens/ProfileScreens';
-import ElectionDetailScreen from './src/screens/ElectionDetailScreen';
-import ElectionVotingScreen from './src/screens/ElectionVotingScreen';
-import ElectionScreens from './src/screens/ElectionScreens';
+import ElectionDetailScreen from './src/screens/election/ElectionDetailScreen';
+import ElectionVotingScreen from './src/screens/election/ElectionVotingScreen';
+import ElectionScreens from './src/screens/election/ElectionScreens';
+
 
 //HeaderBar
-import { DefaultHeaderBar, FragmentCardHeaderBar, FragmentHeaderBar } from './src/components/HeaderBar'
-import ElectionVotingConfirmationScreen from './src/screens/ElectionVotingConfirmationScreen';
-import ElectionVotingSuccessScreen from './src/screens/ElectionVotingSuccessScreen';
+import { DefaultHeaderBar, DefaultHeaderTitle, FragmentCardHeaderBar, FragmentHeaderBar } from './src/components/HeaderBar'
+import ElectionVotingConfirmationScreen from './src/screens/election/ElectionVotingConfirmationScreen';
+import ElectionVotingSuccessScreen from './src/screens/election/ElectionVotingSuccessScreen';
+import SettingScreen from './src/screens/profile/SettingScreen';
+import SettingShowCertScreen from './src/screens/profile/SettingShowCertScreen';
+import LandingScreen from './src/screens/LandingScreen';
+import LoginLandingScreen from './src/screens/authpage/LoginLandingScreen';
+import LoginScreen from './src/screens/authpage/LoginScreen';
+import RegisterScreen from './src/screens/authpage/RegisterScreen';
 
 const Tab = createBottomTabNavigator();
 const TabOpts = { headerShown: false, tabBarShowLabel: false }
@@ -22,7 +28,12 @@ const Stack = createNativeStackNavigator();
 export default function Navigator() {
     return (
         <NavigationContainer>
-            <Stack.Navigator>
+            <Stack.Navigator
+                initialRouteName='LandingPage'
+                // screenOptions={{
+                //     cardStyle:{backgroundColor:'#fff'}
+                // }}
+            >
                 <Stack.Screen name='Home' component={TabNavigator}
                     options={{
                         headerShown: false
@@ -37,6 +48,67 @@ export default function Navigator() {
                     }}
                 />
 
+                <Stack.Screen
+                    name='SettingShowCertificate'
+                    component={SettingShowCertScreen}
+                    options={{
+                        title: 'Certificate & Private Key',
+                        headerTitleAlign: 'center',
+                        headerBackTitleVisible: false,
+                    }}
+                />
+
+                {/* LandingScreen */}
+                <Stack.Screen
+                    name='LandingPage'
+                    component={LandingScreen}
+                    options={{
+                        headerTitle: () => <DefaultHeaderTitle />,
+                        headerTitleAlign: 'center',
+                        headerShadowVisible: false,
+
+                    }}
+                />
+
+                <Stack.Screen
+                    name='LoginLanding'
+                    component={LoginLandingScreen}
+                    options={{
+                        // headerBackTitleVisible: true,
+                        headerTitle: () => <DefaultHeaderTitle />,
+                        headerTitleAlign: 'center',
+                        headerShadowVisible: false,
+
+                    }}
+                />
+
+                <Stack.Screen
+                    name='Login'
+                    component={LoginScreen}
+                    options={{
+                        headerTitle: () => <DefaultHeaderTitle />,
+                        headerBackTitleVisible: false,
+                        headerTitleAlign: 'center',
+                        headerShadowVisible: false,
+
+                    }}
+
+                />
+
+                <Stack.Screen
+                    name='Register'
+                    component={RegisterScreen}
+                    options={{
+                        headerTitle: () => <DefaultHeaderTitle />,
+                        headerBackTitleVisible: false,
+                        headerTitleAlign: 'center',
+                        headerShadowVisible: false,
+                        // headerBackVisible:false,
+
+                    }}
+
+                />
+
 
             </Stack.Navigator>
         </NavigationContainer>
@@ -45,26 +117,32 @@ export default function Navigator() {
 
 function TabNavigator() {
     return (
-        <Tab.Navigator>
+        <Tab.Navigator
+
+        >
             <Tab.Screen
-                name='Homes'
+                name='Elections'
                 component={ElectionStackScreen}
                 options={{
                     ...TabOpts,
+                    tabBarActiveTintColor: '#25AAE1',
                     tabBarIcon: ({ color, size }) => (
                         <AntDesign name='home' size={size} color={color} />
-                    )
+                    ),
                 }}
 
             />
             <Tab.Screen
-                name='Profile'
-                component={ProfileScreens}
+                name='Settings'
+                component={ProfileStackScreen}
                 options={{
                     ...TabOpts,
+                    tabBarActiveTintColor: '#25AAE1',
                     tabBarIcon: ({ color, size }) => (
-                        <AntDesign name='user' size={size} color={color} />
+                        <AntDesign name="setting" size={size} color={color} />
                     )
+
+
                 }}
             />
         </Tab.Navigator>
@@ -118,6 +196,20 @@ const ElectionStackScreen = () => {
     )
 }
 
+const ProfileStack = createNativeStackNavigator();
+const ProfileStackScreen = () => (
+    <ProfileStack.Navigator>
+        <ProfileStack.Screen
+            name='Setting'
+            component={SettingScreen}
+            options={({ navigation, route }) => ({
+                headerTitleAlign: 'center',
+                // headerLeft: () => (<Text className='text-bluechain' onPress={navigation.goBack}>Cancel</Text>)
+            })}
+        />
 
+
+    </ProfileStack.Navigator>
+)
 
 

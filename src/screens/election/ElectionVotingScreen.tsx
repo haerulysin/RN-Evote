@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { MaterialIcons, AntDesign } from '@expo/vector-icons';
 import { styled } from 'nativewind';
-import CandidatesRadioButton from '../components/CandidatesRadio';
+import CandidatesRadioButton from '../../components/CandidatesRadio';
 import { NavigationProp } from '@react-navigation/native';
 
 type ElectionVotingScreenProps = {

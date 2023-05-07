@@ -64,14 +64,14 @@ export const CandidatesCard = (props: CandidatesCardProp) => {
                     <View className='h-20 w-20 p-2 '>
                         <Image source={{ uri: props.candidatesPhoto }} className='h-full w-full rounded-full' />
                     </View>
-                    <View className='flex justify-center'>
+                    <View className='flex justify-center w-full'>
                         <Text className='text-lg font-semibold'>{props.candidatesName}</Text>
-                        <Text className='text-xs w-8/12 opacity-50'>{props.candidatesDescription}</Text>
+                        <Text className='text-xs w-9/12 opacity-50'>{props.candidatesDescription}</Text>
                     </View>
                 </View>
 
-                <View className='flex items-center justify-center w-2/12'>
-                    {props.pickedOption === props.candidatesName || props.confirmationCard ? <FontAwesome5 name="vote-yea" size={24} color="#4086FF" /> : null}
+                <View className='flex justify-center items-end pr-2 w-2/12'>
+                    {props.pickedOption === props.candidatesName || props.confirmationCard ? <FontAwesome5 name="vote-yea" size={22} color="#25AAE1" /> : null}
                 </View>
             </TouchableOpacity>
         </View>

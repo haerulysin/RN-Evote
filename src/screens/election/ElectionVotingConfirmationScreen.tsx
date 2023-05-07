@@ -2,8 +2,8 @@ import React, { FC } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { NavigationProp } from '@react-navigation/native';
 import * as LocalAuthentication from 'expo-local-authentication';
-import biometricsAuth from '../utils/localAuth';
-import { CandidatesCard } from '../components/CandidatesRadio';
+import biometricsAuth from '../../utils/localAuth';
+import { CandidatesCard } from '../../components/CandidatesRadio';
 
 
 type ElectionVotingConfirmationScreenProps = {
@@ -15,7 +15,7 @@ const ElectionVotingConfirmationScreen = (props: ElectionVotingConfirmationScree
     const { navigation } = props;
 
     return (
-        <View className='h-full bg-white px-4'>
+        <View className='h-full w-full bg-white px-4'>
             <View className='flex'>
                 <Text className='text-3xl font-bold'>Confirmation</Text>
                 <Text className='text-sm opacity-40'>Please enter passcode to confirm your choice</Text>
@@ -32,7 +32,7 @@ const ElectionVotingConfirmationScreen = (props: ElectionVotingConfirmationScree
                 <Text>FACEID LOGO HERE</Text>
             </View>
 
-            <View className='flex flex-col justify-center items-center'>
+            <View className='flex flex-col justify-center items-center w-full '>
                 <Text className='font-medium opacity-50'>Voting for</Text>
                 <Text className='font-bold pb-4'>Mayoral Election</Text>
                 <CandidatesCard

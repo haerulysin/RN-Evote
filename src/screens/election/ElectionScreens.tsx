@@ -1,8 +1,8 @@
 import React, { FC } from 'react'
-import ElectionCard from '../components/ElectionCard';
+import ElectionCard from '../../components/ElectionCard';
 import { ScrollView, Button, View, Text, useWindowDimensions } from 'react-native'
 import { NavigationProp } from '@react-navigation/native';
-import { ElectionCardProps } from '../types';
+import { ElectionCardProps } from '../../types';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 
@@ -26,11 +26,11 @@ const renderTabBar = (props: any) => (
     renderLabel={({ route, focused, color }) => (
       <Text style={{ color }}>{route.title}</Text>
     )}
-    activeColor='#4086FF'
+    activeColor='#25AAE1'
     inactiveColor='#000'
     pressOpacity={0.7}
     style={{ backgroundColor: '#fff' }}
-    indicatorStyle={{ backgroundColor: '#4086FF', shadowColor: '#000' }}
+    indicatorStyle={{ backgroundColor: '#25AAE1', shadowColor: '#000' }}
     tabStyle={{ height: 41, flex: 1, justifyContent: 'center', alignItems: 'center' }}
   />
 )

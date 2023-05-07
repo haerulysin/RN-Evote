@@ -3,7 +3,7 @@ import { View, Text, ImageBackground, Pressable } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { MaterialIcons, AntDesign } from '@expo/vector-icons';
 import { NavigationProp } from '@react-navigation/native';
-
+import { useFonts, Lekton_400Regular, Lekton_700Bold } from '@expo-google-fonts/lekton';
 const masjiduri = 'https://images.unsplash.com/photo-1628307106657-9112a8260318?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80'
 export function FragmentCardHeaderBar(props: any) {
     return (
@@ -58,5 +58,21 @@ export function DefaultHeaderBar(props: any) {
                 <AntDesign.Button name="calendar" backgroundColor={'transparent'} color={'black'} size={22} />
             </View>
         </SafeAreaView>
+    )
+}
+
+
+
+export const DefaultHeaderTitle = () => {
+    let [fontsLoaded] = useFonts({Lekton_700Bold})
+    if(!fontsLoaded) return null;
+    return (
+        <Text style={{
+            fontFamily:'Lekton_700Bold',
+            fontSize:24,
+
+        }}>
+            HLVote
+        </Text>
     )
 }
