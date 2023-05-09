@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { ButtonGroupWithText, SwitchGroupWithText } from '../../components/SettingButton';
 import { NavigationProp } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
@@ -17,7 +17,7 @@ const SettingScreen = (props: SettingScreenProps) => {
 
             <SwitchGroupWithText
                 title='Sign in with Biometric?'
-                isEnabled = {biometricEnabled}
+                isEnabled={biometricEnabled}
                 setIsEnabled={setBiometricEnabled}
             />
 
@@ -36,10 +36,17 @@ const SettingScreen = (props: SettingScreenProps) => {
                 title='Show Certificate & Private Key'
                 btnTitle='Certificate & Private Key'
                 btnText='Never disclose this certificate and private key. Anyone with your private key can fully control your account, including revoke your ballot.'
-                onPress={()=>{props.navigation.navigate('SettingShowCertificate')}}
+                onPress={() => { props.navigation.navigate('SettingShowCertificate') }}
             />
 
-            <StatusBar style='dark'/>
+            <TouchableOpacity
+                className='h-12 bg-red-500 rounded-md items-center justify-center'
+                onPress={() => props.navigation.navigate('LoginLanding')}
+            >
+                <Text>Logout</Text>
+            </TouchableOpacity>
+
+            <StatusBar style='dark' />
         </View>
     );
 };

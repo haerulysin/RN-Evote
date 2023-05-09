@@ -4,10 +4,10 @@ import { View, Text, TextInput, KeyboardTypeOptions, Platform, TouchableOpacity 
 type InputProps = {
     label: string;
     value?: string | any;
-    setValue: Dispatch<SetStateAction<string | null>>;
+    setValue: Dispatch<SetStateAction<string>>;
     keyType?: KeyboardTypeOptions;
     secureTextEntry?: Boolean;
-    setShowTextEntry?: Dispatch<SetStateAction<Boolean>>;
+    setShowTextEntry?: Dispatch<SetStateAction<boolean>>;
     passwordShowBtnVisible?: Boolean;
 }
 
@@ -28,7 +28,7 @@ const Input = ({
         <View className='w-full'>
             <View className='flex flex-row justify-between'>
                 <Text className='my-2.5 text-black'>{label}</Text>
-                {secureTextEntry !== undefined && passwordShowBtnVisible !== false ?
+                {secureTextEntry !== undefined && passwordShowBtnVisible !== false && setShowTextEntry!==undefined ?
                     <TouchableOpacity onPress={() => setShowTextEntry!(!secureTextEntry)}>
                         <Text className='my-2.5 text-black'>{secureTextEntry ? 'Show' : 'Hide'}</Text>
                     </TouchableOpacity>

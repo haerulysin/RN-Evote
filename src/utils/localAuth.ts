@@ -1,22 +1,64 @@
 import {
-    hasHardwareAsync,
-    isEnrolledAsync,
-    authenticateAsync
-} from 'expo-local-authentication';
+  hasHardwareAsync,
+  isEnrolledAsync,
+  authenticateAsync,
+  supportedAuthenticationTypesAsync,
+  getEnrolledLevelAsync,
+} from "expo-local-authentication";
 
+type biometricReturn = {
+  status: number | string;
+  message?: string | unknown;
+};
+export default class BiometricAuth {
+  constructor() {}
 
+  async compatibleCheck(): Promise<any> {
+    let result: biometricReturn = {
+      status: 200,
+    };
+    try {
+      const isCompatible = await this.isCompatible();
+      const isEnrolled = await this._isEnrolled();
+      const auth = await this.authenticate();
+      result = { status: auth };
+      return result;
+    } catch (e) {
+      return (result = {
+        status: 400,
+        message: e,
+      });
+    }
+  }
 
-const biometricsAuth = async() => {
-    const compatible = hasHardwareAsync();
-    if(!compatible) throw 'This device is not compatible for biometric authentication';
+  async isCompatible(): Promise<boolean> {
+    const result = await hasHardwareAsync();
+    if (!result) {
+      throw "Not Supported";
+    }
+    return result;
+  }
 
-    const enrolled = await isEnrolledAsync();
-    if(!enrolled) throw `Not Enrolled`;
+  async isEnrolled():Promise<boolean>{
+    return await isEnrolledAsync();
+  }
 
-    const result = await authenticateAsync();
-    if(!result.success) throw `Failed`;
+  async _isEnrolled(): Promise<boolean> {
+    const result = await isEnrolledAsync();
+    if (!result) {
+      throw "Your device doesnt have biometric authentication";
+    }
 
-    return
+    return result;
+  }
+
+  async authenticate(): Promise<string | number> {
+    const auth = await authenticateAsync();
+    if (!auth.success) throw auth.error;
+    return 200;
+  }
+
+  async getSupportedAuthType(): Promise<any> {
+    return await getEnrolledLevelAsync();
+  }
 }
-
-export default biometricsAuth;

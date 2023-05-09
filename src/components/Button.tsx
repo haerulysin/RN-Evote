@@ -7,6 +7,7 @@ type ButtonProps = {
     bgcolor?: string;
     onPress?: () => void;
     textcolor?: string;
+    disabled?: boolean;
 
 }
 
@@ -14,9 +15,14 @@ export const CButton: React.FC<ButtonProps> = ({
     title,
     bgcolor,
     textcolor,
+    disabled,
     onPress
 }: ButtonProps) => (
-    <TouchableOpacity className={`w-full items-center rounded-2xl p-3.5 justify-center mb-2 bg-${bgcolor != undefined ? bgcolor : 'bluechain'}`} onPress={onPress}>
+    <TouchableOpacity
+        className={`w-full items-center rounded-2xl p-3.5 justify-center mb-2 bg-${bgcolor != undefined ? bgcolor : 'bluechain'} ${disabled?'opacity-50':''}`}
+        onPress={onPress}
+        disabled={disabled}
+    >
         <Text className={`text-md font-medium text-${textcolor != null ? textcolor : 'white'}`}>{title}</Text>
     </TouchableOpacity>
 )
