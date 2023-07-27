@@ -1,10 +1,28 @@
+export type RootStackParamList = {
+  Register: undefined;
+  Home: undefined;
+  Profile: undefined;
+  ElectionVotingSuccess: undefined;
+  SettingShowCertificate: undefined;
+  LandingPage: undefined;
+  Login: undefined;
+  LoginLanding: undefined;
+}
+
+export type ElectionStackParamList = {
+  ElectionVoting: { electionID: string };
+  Election: undefined;
+  ElectionDetail: undefined;
+  ElectionVotingConfirmation: undefined;
+
+}
 export type Election = {
   electionID?: string;
   electionName: string;
   electionLocation: string;
-  electionDate: string[];
+  electionDate: { from: string; to: string; };
   electionShowResult: boolean;
-  totalVotes?:number;
+  totalVotes?: number;
   docType: string;
 };
 
@@ -62,10 +80,13 @@ export type JobSummary = {
 };
 
 export type ElectionCardProps = {
+  electionID?: string;
   electionName: string;
   electionLocation: string;
-  electionDate: string;
-  electionTotal: number;
+  electionDate: { from: string; to: string; };
+  electionShowResult: boolean;
+  totalVotes?: number;
+  docType: string;
   onClick?: () => void;
 };
 

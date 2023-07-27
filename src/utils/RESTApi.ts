@@ -29,15 +29,12 @@ export const Login = async (cert: string): Promise<APIResponseType> => {
 
 
 export const GetElectionList = async (): Promise<APIResponseType> => {
-
     const fetchs = await fetch(`${apiURL}/election/`, {
         headers: {
             'Content-Type': 'application/json',
             'x-api-key': await LocalStorage.get('uid')
         },
     });
-
-
     return{
         status: fetchs.status,
         data: await fetchs.json()

@@ -22,10 +22,12 @@ import LoginLandingScreen from './src/screens/authpage/LoginLandingScreen';
 import LoginScreen from './src/screens/authpage/LoginScreen';
 import RegisterScreen from './src/screens/authpage/RegisterScreen';
 import React from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
+import { ElectionStackParamList, RootStackParamList } from './src/types';
 
 const Tab = createBottomTabNavigator();
 const TabOpts = { headerShown: false, tabBarShowLabel: false }
-const Stack = createNativeStackNavigator();
+const Stack = createStackNavigator<RootStackParamList>();;
 export default function Navigator() {
     return (
         <NavigationContainer>
@@ -163,7 +165,7 @@ function TabNavigator() {
     )
 }
 
-const ElectionStack = createNativeStackNavigator();
+const ElectionStack = createStackNavigator<ElectionStackParamList>();
 const ElectionStackScreen = () => {
     return (
         <ElectionStack.Navigator initialRouteName='Election' >
@@ -177,6 +179,7 @@ const ElectionStackScreen = () => {
 
             <ElectionStack.Screen
                 name='ElectionDetail'
+                // component={ElectionDetailScreen}
                 component={ElectionDetailScreen}
                 options={{
                     header: (props) => <FragmentHeaderBar {...props} />

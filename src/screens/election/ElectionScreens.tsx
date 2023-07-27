@@ -1,6 +1,6 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
 import ElectionCard from '../../components/ElectionCard';
-import { ScrollView, Button, View, Text, useWindowDimensions } from 'react-native'
+import { ScrollView, Button, View, Text, useWindowDimensions, RefreshControl } from 'react-native'
 import { NavigationProp } from '@react-navigation/native';
 import { Election, ElectionCardProps } from '../../types';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -13,12 +13,12 @@ type Props = {
 }
 const ElectionScreenStack = createNativeStackNavigator();
 
-const electionData: ElectionCardProps = {
-  electionDate: '2023-05-08T03:26:27.701Z',
-  electionName: 'Mayoral Election',
-  electionLocation: 'Banyumas, ID',
-  electionTotal: 2343238
-}
+// const electionData: ElectionCardProps = {
+//   electionDate: '2023-05-08T03:26:27.701Z',
+//   electionName: 'Mayoral Election',
+//   electionLocation: 'Banyumas, ID',
+//   electionTotal: 2343238
+// }
 
 
 
@@ -41,21 +41,29 @@ export default function ElectionScreens(props: Props) {
   const layout = useWindowDimensions();
   const [index, setIndex] = React.useState(0);
   const [electionList, setElectionList] = useState<Election[]>([]);
+  const [refreshing, setRefreshing] = useState<boolean>(false);
   const [routes] = React.useState([
     { key: 'all', title: 'All' },
     { key: 'participated', title: 'Participated' },
-    { key: 'archived', title: 'Archived' },
+    // { key: 'archived', title: 'Archived' },
   ]);
+
+  const onRefreshData = () => {
+    console.log("Refreshing")
+    setRefreshing(true);
+    GetElectionList()
+      .then((r) => setElectionList(r.data as Election[]))
+      .catch((e) => console.log(e))
+      .finally(() => setRefreshing(false));
+  }
 
 
   useEffect(() => {
-    const getElection = async ():Promise<any> => {
-      const data = await GetElectionList();
-      setElectionList(data.data as Election[]);
-    }
-    getElection();
-
-    console.log(electionList)
+    // GetElectionList()
+    //   .then((r) => setElectionList(r.data as Election[]))
+    //   .catch((e) => console.log(e))
+    //   .finally(() => console.log("Election List Loaded"));
+    onRefreshData();
   }, []);
 
 
@@ -65,7 +73,14 @@ export default function ElectionScreens(props: Props) {
       renderScene={({ route }) => {
         switch (route.key) {
           case 'all':
-            return <ElectionTab {...props} />
+            return <ElectionTab
+              electionDataList={electionList}
+              refreshing={refreshing}
+              onRefresh={() => onRefreshData()}
+              {...props}
+            />
+
+            break;
           case 'participated':
             return <ParticipatedTab {...props} />
           case 'archived':
@@ -81,14 +96,32 @@ export default function ElectionScreens(props: Props) {
   );
 }
 
-function ElectionTab(props: any) {
-  const { navigation } = props;
+type ElectionTabProps = {
+  electionDataList: Election[],
+  navigation: NavigationProp<any, any>;
+  refreshing: boolean;
+  onRefresh: () => void;
+}
+function ElectionTab({ navigation, electionDataList, refreshing, onRefresh }: ElectionTabProps) {
   return (
-    <ScrollView className='px-4 pt-4 bg-white'>
-      <ElectionCard
-        {...electionData}
-        onClick={() => navigation.navigate('ElectionVoting')}
-      />
+    <ScrollView
+      className='px-4 pt-4 bg-white'
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={() => onRefresh}
+        />
+      }
+    >
+      {
+        electionDataList.map((v, i) => (
+          <ElectionCard
+            key={i}
+            {...v}
+            onClick={() => navigation.navigate('ElectionVoting', { electionID: v.electionID })}
+          />
+        ))
+      }
     </ScrollView>
   )
 }

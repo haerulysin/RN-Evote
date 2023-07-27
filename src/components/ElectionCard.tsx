@@ -20,7 +20,7 @@ const ElectionCard: React.FC<ElectionCardProps> = (props: ElectionCardProps) => 
 
                 <View className="h-fit bg-bluechain rounded-b-md px-2 py-3">
                     <Text className="text-white font-medium pb-0.5">{inExpire}</Text>
-                    <Text className="text-white font-light text-xs">{props.electionTotal.toLocaleString('de-DE')} Votes</Text>
+                    <Text className="text-white font-light text-xs">{props.totalVotes?.toLocaleString('de-DE')} Votes</Text>
                 </View>
 
             </ImageBackground>
@@ -29,16 +29,16 @@ const ElectionCard: React.FC<ElectionCardProps> = (props: ElectionCardProps) => 
 }
 
 
-function countExpire(endTime: string): string {
+function countExpire(electionTime: { from: string, to: string; }): string {
     const currentTime = new Date().valueOf();
-    const expireTime = new Date(endTime).valueOf();
-    let delta = Math.abs(expireTime - currentTime)/1000;
-    const days = Math.floor(delta/86400);
-    delta -= days*86400;
-    const hours = Math.floor(delta/3600)%24;
+    const expireTime = new Date(electionTime.to).valueOf();
+    let delta = Math.abs(expireTime - currentTime) / 1000;
+    const days = Math.floor(delta / 86400);
+    delta -= days * 86400;
+    const hours = Math.floor(delta / 3600) % 24;
     delta -= hours * 3600;
-    const minutes = Math.floor(delta/60)%60;
+    const minutes = Math.floor(delta / 60) % 60;
     return `Voting Closes in ${days} Day ${hours} Hours`;
-  }
+}
 
 export default ElectionCard;

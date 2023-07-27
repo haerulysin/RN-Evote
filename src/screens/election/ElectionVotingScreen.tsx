@@ -3,17 +3,17 @@ import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { MaterialIcons, AntDesign } from '@expo/vector-icons';
 import { styled } from 'nativewind';
 import CandidatesRadioButton from '../../components/CandidatesRadio';
-import { NavigationProp } from '@react-navigation/native';
+import { NavigationProp, Route } from '@react-navigation/native';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { ElectionStackParamList, RootStackParamList } from '../../types';
 
-type ElectionVotingScreenProps = {
-    navigation: NavigationProp<any, any>;
-}
+type Props = NativeStackScreenProps<ElectionStackParamList, 'ElectionVoting'>;
+// type Props = {}
+
 
 const StyledView = styled(View, 'flex flex-row justify-center items-center opacity-50');
-const ElectionVotingScreen = (props: ElectionVotingScreenProps) => {
+const ElectionVotingScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     const [pickedOption, setPickedOption] = useState<string | null>(null);
-    const { navigation } = props;
-
     return (
         <View className='flex items-center h-full pt-2 bg-gray-200'>
             <ScrollView className='pt-2 w-full'>
@@ -44,7 +44,7 @@ const ElectionVotingScreen = (props: ElectionVotingScreenProps) => {
                 <View className='flex mb-2 px-4'>
                     <TouchableOpacity
                         disabled={pickedOption === null ? true : false}
-                        className={` p-2 h-12 rounded-lg items-center ${pickedOption ? 'bg-bluechain':'bg-blue-300' }`}
+                        className={` p-2 h-12 rounded-lg items-center ${pickedOption ? 'bg-bluechain' : 'bg-blue-300'}`}
                         onPress={() => { navigation.navigate('ElectionVotingConfirmation') }}
                     >
                         <Text className='text-white font-bold text-lg'>Confirm your Vote</Text>
