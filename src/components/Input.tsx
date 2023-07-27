@@ -1,4 +1,5 @@
 import React, { FC, useState, Dispatch, SetStateAction } from 'react';
+import { UseFormRegister } from 'react-hook-form';
 import { View, Text, TextInput, KeyboardTypeOptions, Platform, TouchableOpacity } from 'react-native';
 
 type InputProps = {
@@ -9,6 +10,7 @@ type InputProps = {
     secureTextEntry?: Boolean;
     setShowTextEntry?: Dispatch<SetStateAction<boolean>>;
     passwordShowBtnVisible?: Boolean;
+    errors?: string;
 }
 
 const Input = ({
@@ -18,7 +20,8 @@ const Input = ({
     secureTextEntry,
     setShowTextEntry,
     passwordShowBtnVisible,
-    keyType
+    keyType,
+    errors,
 }: InputProps
 ) => {
     const [borderColor, setBorderColor] = useState<string>('border-gray-300')
@@ -28,7 +31,7 @@ const Input = ({
         <View className='w-full'>
             <View className='flex flex-row justify-between'>
                 <Text className='my-2.5 text-black'>{label}</Text>
-                {secureTextEntry !== undefined && passwordShowBtnVisible !== false && setShowTextEntry!==undefined ?
+                {secureTextEntry !== undefined && passwordShowBtnVisible !== false && setShowTextEntry !== undefined ?
                     <TouchableOpacity onPress={() => setShowTextEntry!(!secureTextEntry)}>
                         <Text className='my-2.5 text-black'>{secureTextEntry ? 'Show' : 'Hide'}</Text>
                     </TouchableOpacity>
@@ -42,13 +45,12 @@ const Input = ({
                 placeholder={label}
                 onFocus={() => setBorderColor('border-bluechain50')}
                 onBlur={() => setBorderColor('border-gray-300')}
-                // selectionColor='#a8ddf3'
                 onChangeText={setValue}
                 keyboardType={keyboardType}
                 style={{ fontSize: 14 }}
                 secureTextEntry={secureTextEntry ? true : false}
-
             />
+            {errors && <Text className='text-red-400 text-xs'>{errors}</Text>}
         </View>
     );
 };

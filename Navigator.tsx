@@ -21,6 +21,7 @@ import LandingScreen from './src/screens/LandingScreen';
 import LoginLandingScreen from './src/screens/authpage/LoginLandingScreen';
 import LoginScreen from './src/screens/authpage/LoginScreen';
 import RegisterScreen from './src/screens/authpage/RegisterScreen';
+import React from 'react';
 
 const Tab = createBottomTabNavigator();
 const TabOpts = { headerShown: false, tabBarShowLabel: false }
@@ -29,10 +30,10 @@ export default function Navigator() {
     return (
         <NavigationContainer>
             <Stack.Navigator
-                initialRouteName='LandingPage'
-                // screenOptions={{
-                //     cardStyle:{backgroundColor:'#fff'}
-                // }}
+                initialRouteName='Register'
+            // screenOptions={{
+            //     cardStyle:{backgroundColor:'#fff'}
+            // }}
             >
                 <Stack.Screen name='Home' component={TabNavigator}
                     options={{
@@ -120,6 +121,21 @@ function TabNavigator() {
         <Tab.Navigator
 
         >
+
+            <Tab.Screen
+                name='Blocks'
+                component={ProfileStackScreen}
+                options={{
+                    ...TabOpts,
+                    tabBarActiveTintColor: '#25AAE1',
+                    tabBarIcon: ({ color, size }) => (
+                        <AntDesign name="CodeSandbox" size={size} color={color} />
+                    )
+
+
+                }}
+            />
+
             <Tab.Screen
                 name='Elections'
                 component={ElectionStackScreen}
@@ -141,8 +157,6 @@ function TabNavigator() {
                     tabBarIcon: ({ color, size }) => (
                         <AntDesign name="setting" size={size} color={color} />
                     )
-
-
                 }}
             />
         </Tab.Navigator>
@@ -196,7 +210,7 @@ const ElectionStackScreen = () => {
     )
 }
 
-const ProfileStack = createNativeStackNavigator();
+export const ProfileStack = createNativeStackNavigator();
 const ProfileStackScreen = () => (
     <ProfileStack.Navigator>
         <ProfileStack.Screen
@@ -207,7 +221,6 @@ const ProfileStackScreen = () => (
                 // headerLeft: () => (<Text className='text-bluechain' onPress={navigation.goBack}>Cancel</Text>)
             })}
         />
-
 
     </ProfileStack.Navigator>
 )

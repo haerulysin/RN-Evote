@@ -5,17 +5,14 @@ import { CButton } from '../components/Button';
 import { NavigationProp } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 
-
 type LandingScreenProps = {
     navigation: NavigationProp<any, any>
 }
 
 const LandingScreen = (props: LandingScreenProps) => {
-
-
     return (
         <SafeAreaView className='px-4 bg-white h-full'>
-            <StatusBar style='dark'/>
+            <StatusBar style='dark' />
             <View className='flex justify-between h-full'>
                 <View className='mt-5 mb-2'>
                     <View className='h-fit items-center'>

@@ -4,6 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import { MaterialIcons, AntDesign } from '@expo/vector-icons';
 import { NavigationProp } from '@react-navigation/native';
 import { useFonts, Lekton_400Regular, Lekton_700Bold } from '@expo-google-fonts/lekton';
+import React from 'react';
 const masjiduri = 'https://images.unsplash.com/photo-1628307106657-9112a8260318?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80'
 export function FragmentCardHeaderBar(props: any) {
     return (

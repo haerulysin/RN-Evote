@@ -1,10 +1,12 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import ElectionCard from '../../components/ElectionCard';
 import { ScrollView, Button, View, Text, useWindowDimensions } from 'react-native'
 import { NavigationProp } from '@react-navigation/native';
-import { ElectionCardProps } from '../../types';
+import { Election, ElectionCardProps } from '../../types';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
+import * as LocalStorage from '../../utils/LocalStorage';
+import { GetElectionList } from '../../utils/RESTApi';
 
 type Props = {
   navigation: NavigationProp<any, any>
@@ -38,11 +40,24 @@ const renderTabBar = (props: any) => (
 export default function ElectionScreens(props: Props) {
   const layout = useWindowDimensions();
   const [index, setIndex] = React.useState(0);
+  const [electionList, setElectionList] = useState<Election[]>([]);
   const [routes] = React.useState([
     { key: 'all', title: 'All' },
     { key: 'participated', title: 'Participated' },
     { key: 'archived', title: 'Archived' },
-  ])
+  ]);
+
+
+  useEffect(() => {
+    const getElection = async ():Promise<any> => {
+      const data = await GetElectionList();
+      setElectionList(data.data as Election[]);
+    }
+    getElection();
+
+    console.log(electionList)
+  }, []);
+
 
   return (
     <TabView
