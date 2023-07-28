@@ -6,36 +6,42 @@ import { TextInput, View, Text, Alert } from "react-native";
 import Input from "../../components/Input";
 import { enrollIdentities } from "../../utils/RESTApi";
 import * as LocalStorage from '../../utils/LocalStorage';
+import { AuthContext } from "../../context/AuthContext";
+import * as SecureStore from 'expo-secure-store';
 
 type EnrollFormProp = {
     setPage: Dispatch<SetStateAction<number>>;
-
 }
 export const EnrollForm = ({
     setPage
 }: EnrollFormProp) => {
-    // const [isValid, setIsValid] = useState<boolean>(false);
     const [submitButtonState, setSubmitButtonState] = useState<boolean>(true);
-    const { register, handleSubmit, control, reset, formState: { errors, isValid } } = useForm<EnrollFormTypes>({
+    const { register, handleSubmit, control, reset, setValue, formState: { errors, isValid } } = useForm<EnrollFormTypes>({
         defaultValues: {
             voterID: '',
             voterRegisterID: '',
             voterName: '',
         },
         mode: 'onChange'
-    })
-
+    });
+    const authContext = React.useContext(AuthContext) as any;
     const onSubmit = async (data: EnrollFormTypes) => {
-        // Alert.alert(JSON.stringify(data))
         const enroll: APIResponseType = await enrollIdentities(JSON.stringify(data));
         const apiData: any = enroll.data;
         if (enroll.status !== 200) {
             Alert.alert("Enroll Failed", JSON.stringify(enroll.data));
         } else {
             await LocalStorage.store("cert", JSON.stringify(apiData));
-            setPage(prev => prev+1);
+            await SecureStore.setItemAsync("cert", JSON.stringify(apiData))
+            setPage(prev => prev + 1);
         }
     };
+
+    const onSetValue = () => {
+        setValue("voterID","8575159495",{shouldValidate:true});
+        setValue("voterName","Magdalena",{shouldValidate:true});
+        setValue("voterRegisterID","5291768107",{shouldValidate:true});
+    }
     return (
         <View>
             <View className='items-center mb-4'>
@@ -93,9 +99,12 @@ export const EnrollForm = ({
                     />
                 )}
             />
-
-
             <View className="mt-5">
+
+                <CButton
+                    title="Fill"
+                    onPress={onSetValue}
+                />
                 <CButton
                     title="Submit"
                     onPress={handleSubmit(onSubmit)}

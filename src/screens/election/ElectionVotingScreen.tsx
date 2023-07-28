@@ -1,22 +1,69 @@
-import React, { FC, useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import React, { FC, useEffect, useState } from 'react';
+import { View, Text, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
 import { MaterialIcons, AntDesign } from '@expo/vector-icons';
 import { styled } from 'nativewind';
 import CandidatesRadioButton from '../../components/CandidatesRadio';
-import { NavigationProp, Route } from '@react-navigation/native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { ElectionStackParamList, RootStackParamList } from '../../types';
+import { Candidate, Election, ElectionStackParamList } from '../../types';
+import { GetCandidateByElectionID, GetElectionByID, GetElectionList } from '../../utils/RESTApi';
+import { FragmentCardHeaderBar } from '../../components/HeaderBar';
 
 type Props = NativeStackScreenProps<ElectionStackParamList, 'ElectionVoting'>;
-// type Props = {}
-
-
 const StyledView = styled(View, 'flex flex-row justify-center items-center opacity-50');
-const ElectionVotingScreen: React.FC<Props> = ({ navigation, route }: Props) => {
+const ElectionVotingScreen: React.FC<Props> = (props: Props) => {
     const [pickedOption, setPickedOption] = useState<string | null>(null);
+    const [electionData, setElectionData] = useState<Election>();
+    const [candidateList, setCandidateList] = useState<Candidate[]>([]);
+    const [refreshing, setRefreshing] = useState<boolean>(false);
+    const { electionID } = props.route.params;
+
+    const getElectionData = () => {
+        GetElectionByID(electionID)
+            .then(r => {
+                if (r.status === 200) {
+                    setElectionData(r.data as Election);
+                    setCandidateList((r.data as any).candidateList);
+                }
+            })
+            .catch(e => console.log(e))
+            .finally(() => setRefreshing(false));
+    }
+
+
+    useEffect(() => {
+        getElectionData();
+    }, []);
+
+    //Set Header While electionData available;
+    useEffect(() => {
+        const setHeader = () => {
+            props.navigation.setOptions({
+                header: (props) => <FragmentCardHeaderBar
+                    title={electionData?.electionName}
+                    location={electionData?.electionLocation}
+                    {...props}
+                />
+            });
+        }
+
+        setHeader();
+    }, [electionData]);
+
     return (
         <View className='flex items-center h-full pt-2 bg-gray-200'>
-            <ScrollView className='pt-2 w-full'>
+            <ScrollView
+                className='pt-2 w-full'
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={() => {
+                            setRefreshing(true);
+                            getElectionData();
+                        }}
+
+                    />
+                }
+            >
                 <View>
                     <StyledView>
                         <MaterialIcons name="how-to-vote" size={16} color="black" />
@@ -24,12 +71,13 @@ const ElectionVotingScreen: React.FC<Props> = ({ navigation, route }: Props) => 
                     </StyledView>
 
                     <Text className='text-center text-3xl text-bluechain font-bold'>
-                        {(28392839).toLocaleString('de-DE')}
+                        {/* {(electionData?.totalVotes!).toLocaleString('de-DE')} */}
+                        {electionData?.totalVotes}
                     </Text>
 
-                    <StyledView>
+                    <StyledView className=''>
                         <AntDesign name="clockcircleo" size={14} color="black" />
-                        <Text className='px-1 text-sm font-medium'>Voting Closed at 16:00 3 Nov, 2023</Text>
+                        <Text className='px-1 text-sm font-medium text-center'>Voting Closed at {new Date(electionData?.electionDate.to!).toLocaleString()}</Text>
                     </StyledView>
                 </View>
 
@@ -37,6 +85,7 @@ const ElectionVotingScreen: React.FC<Props> = ({ navigation, route }: Props) => 
                     <CandidatesRadioButton
                         pickedOption={pickedOption}
                         setPickedOption={setPickedOption}
+                        candidateList={candidateList}
                     />
                 </View>
 
@@ -45,15 +94,13 @@ const ElectionVotingScreen: React.FC<Props> = ({ navigation, route }: Props) => 
                     <TouchableOpacity
                         disabled={pickedOption === null ? true : false}
                         className={` p-2 h-12 rounded-lg items-center ${pickedOption ? 'bg-bluechain' : 'bg-blue-300'}`}
-                        onPress={() => { navigation.navigate('ElectionVotingConfirmation') }}
+                        onPress={() => { props.navigation.navigate('ElectionVotingConfirmation') }}
                     >
                         <Text className='text-white font-bold text-lg'>Confirm your Vote</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>
-
-
-        </View>
+        </View >
     );
 };
 

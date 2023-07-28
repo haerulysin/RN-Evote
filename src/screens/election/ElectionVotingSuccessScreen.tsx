@@ -8,7 +8,7 @@ type ElectionVotingSuccessScreenProps = {
     navigation: NavigationProp<any, any>;
 }
 
-const ElectionVotingSuccessScreen = (props: ElectionVotingSuccessScreenProps) => {
+const ElectionVotingSuccessScreen = ({navigation}: ElectionVotingSuccessScreenProps) => {
 
 
     return (
@@ -25,7 +25,7 @@ const ElectionVotingSuccessScreen = (props: ElectionVotingSuccessScreenProps) =>
             </View>
 
             <View className='flex flex-col px-4 mb-20'>
-                <TouchableOpacity activeOpacity={0.7} className='flex items-center bg-gray-900 rounded-lg' onPress={() => { props.navigation.navigate('Election') }}>
+                <TouchableOpacity activeOpacity={0.7} className='flex items-center bg-gray-900 rounded-lg' onPress={() => { navigation.navigate('Election') }}>
                     <Text className='text-white p-3 text-lg'>Continue</Text>
                 </TouchableOpacity>
             </View>

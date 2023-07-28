@@ -14,15 +14,14 @@ export function FragmentCardHeaderBar(props: any) {
                     <MaterialIcons name='keyboard-backspace' color={'#fff'} size={24} />
                     <Text className='text-white px-1 text-md font-bold'>
                         {/* {props.back.title ? props.back.title.name : "Back"} */}
-
                         {props.back.title}
 
                     </Text>
                 </Pressable>
 
                 <View className='flex justify-center items-center text-center'>
-                    <Text className='text-white text-3xl w-11/12 font-semibold text-center'>Presidential Election 2020</Text>
-                    <Text className='text-white text-sm  text-center'>Banyumas, Jawa Tengah</Text>
+                    <Text className='text-white text-3xl w-11/12 font-semibold text-center'>{props.title}</Text>
+                    <Text className='text-white text-sm  text-center'>{props.location}</Text>
                 </View>
                 <StatusBar style='light' />
 
@@ -65,12 +64,12 @@ export function DefaultHeaderBar(props: any) {
 
 
 export const DefaultHeaderTitle = () => {
-    let [fontsLoaded] = useFonts({Lekton_700Bold})
-    if(!fontsLoaded) return null;
+    let [fontsLoaded] = useFonts({ Lekton_700Bold })
+    if (!fontsLoaded) return null;
     return (
         <Text style={{
-            fontFamily:'Lekton_700Bold',
-            fontSize:24,
+            fontFamily: 'Lekton_700Bold',
+            fontSize: 24,
 
         }}>
             HLVote

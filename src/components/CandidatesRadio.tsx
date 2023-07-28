@@ -1,42 +1,43 @@
 import { View, Pressable, Text, ImageBackground, Image, TouchableOpacity } from 'react-native';
 import React, { useState, useRef, Dispatch, SetStateAction } from 'react';
 import { FontAwesome5 } from '@expo/vector-icons'
+import { Candidate } from '../types';
 
 
 type CandidatesProp = {
     pickedOption: string | null;
     setPickedOption: Dispatch<SetStateAction<string | null>>;
+    candidateList:Candidate[];
 }
 
-const candidateDataExample = [
-    {
-        "candidatesName": "Katelyn Eaton",
-        "candidatesDescription": "Unfortunately, the candidate has not answered at this time.",
-        "docType": "Candidate",
-        'photoUri': 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Joe_Biden_presidential_portrait.jpg/1200px-Joe_Biden_presidential_portrait.jpg'
-    },
-    {
-        "candidatesName": "Ashwin Shepard",
-        "candidatesDescription": "Unfortunately, the candidate has not answered at this time.",
-        "docType": "Candidate",
-        'photoUri': 'https://cdn.britannica.com/33/198133-050-CDC2D757/Joko-Widodo.jpg'
-    }
-]
+// const candidateDataExample = [
+//     {
+//         "candidatesName": "Katelyn Eaton",
+//         "candidatesDescription": "Unfortunately, the candidate has not answered at this time.",
+//         "docType": "Candidate",
+//         'photoUri': 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Joe_Biden_presidential_portrait.jpg/1200px-Joe_Biden_presidential_portrait.jpg'
+//     },
+//     {
+//         "candidatesName": "Ashwin Shepard",
+//         "candidatesDescription": "Unfortunately, the candidate has not answered at this time.",
+//         "docType": "Candidate",
+//         'photoUri': 'https://cdn.britannica.com/33/198133-050-CDC2D757/Joko-Widodo.jpg'
+//     }
+// ]
 
-const CandidatesRadioButton = (props: CandidatesProp) => {
-    const { pickedOption, setPickedOption } = props;
+const CandidatesRadioButton = ({pickedOption, setPickedOption, candidateList}: CandidatesProp) => {
     return (
         <View>
-            {candidateDataExample.map((items) => {
+            {candidateList.map((item:Candidate) => {
                 return (
                     <CandidatesCard
-                        candidatesName={items.candidatesName}
-                        candidatesDescription={items.candidatesDescription}
-                        candidatesPhoto={items.photoUri}
+                        candidatesName={item.candidateName}
+                        candidatesDescription={item.candidateDescription}
+                        candidatesPhoto={item.candidatePhotoURL as string}
                         // isSelected={items.candidatesName===pickedOption?true:false}
                         pickedOption={pickedOption}
                         setPickedOption={setPickedOption}
-                        key={items.candidatesName}
+                        key={item.candidateID}
 
                     />
                 )
@@ -66,7 +67,7 @@ export const CandidatesCard = (props: CandidatesCardProp) => {
                     </View>
                     <View className='flex justify-center w-full'>
                         <Text className='text-lg font-semibold'>{props.candidatesName}</Text>
-                        <Text className='text-xs w-9/12 opacity-50'>{props.candidatesDescription}</Text>
+                        <Text className='text-xs w-9/12 opacity-50' numberOfLines={2}>{props.candidatesDescription}</Text>
                     </View>
                 </View>
 

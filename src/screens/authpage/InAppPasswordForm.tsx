@@ -2,11 +2,14 @@ import React, { FC, Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { View, Text, Alert } from 'react-native';
 import * as LocalStorage from '../../utils/LocalStorage';
 import { Controller, useForm } from 'react-hook-form';
-import { EnrollFormTypes } from '../../types';
+import { APIResponseType, EnrollFormTypes } from '../../types';
 import Input from '../../components/Input';
 import { CButton } from '../../components/Button';
 import * as Crypto from 'expo-crypto';
 import { NavigationProp } from '@react-navigation/native';
+import * as SecureStore from 'expo-secure-store';
+import { Login } from '../../utils/RESTApi';
+import { AuthContext } from '../../context/AuthContext';
 type InAppPasswordFormProps = {
   setPage: Dispatch<SetStateAction<number>>;
   navigation: NavigationProp<any, any>;
@@ -27,15 +30,19 @@ const InAppPasswordForm: FC<InAppPasswordFormProps> = ({ setPage, navigation }: 
     },
     mode: 'onChange'
   });
-
+  const authContext = React.useContext(AuthContext) as any;
   const onSubmit = async (data: PasswordFormTypes) => {
     const { password } = data;
-    // const passwordHash = createHash('sha256').update(password).digest('hex');
-    // await LocalStorage.store("InAppPassword", passwordHash);
     const passwordHash = await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, password);
     await LocalStorage.store("inAppPassword", passwordHash);
-    // setPage(prev => prev + 1);
-    navigation.navigate('Home');
+    await SecureStore.setItemAsync("inAppPassword", passwordHash);
+    const loginRequest = await Login(await SecureStore.getItemAsync("cert") as string) as any;
+    if (loginRequest.status === 200) {
+      const { uid } = loginRequest.data;
+      authContext.signIn(uid);
+    }else{
+      Alert.alert("Error", loginRequest.data.message);
+    }
   }
 
   return (

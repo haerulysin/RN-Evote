@@ -16,18 +16,7 @@ const ProgressLabels = ["Identities", "Password", "Enrolling"];
 const RegisterScreen = ({
     navigation
 }: RegisterScreenProps) => {
-    const [page, setPage] = useState<number>(1);
-    useEffect(() => {
-        const verifyIsLoggedIn = async () => {
-            const login = await Login(await LocalStorage.get("cert"));
-            if (login.status === 200) {
-                await LocalStorage.store("uid", (login.data as any).uid)
-                navigation.navigate('Home');
-            }
-        }
-        verifyIsLoggedIn();
-    }, [])
-
+    const [page, setPage] = useState<number>(0);
     return (
         <View className='h-full bg-white px-4'>
             <View>
@@ -51,10 +40,10 @@ type MultiStepPageSwitchProps = {
 const MultiStepPageSwitch = (props: MultiStepPageSwitchProps) => {
 
     switch (props.page) {
-        case 1:
+        case 0:
             return <EnrollForm {...props} />
             break;
-        case 2:
+        case 1:
             return <InAppPasswordForm {...props} />
         default:
             return <EnrollForm {...props} />;

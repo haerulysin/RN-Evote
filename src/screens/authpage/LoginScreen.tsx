@@ -43,8 +43,6 @@ const LoginScreen = ({
         const passwordValid = (form.password === form.passwordConfirmation) && form.password.length >= 8;
         const certValid = (form.certificate.length > 1) && form.privateKey.length > 1;
 
-        // console.log("PASSVALID", passwordValid);
-        // console.log("CERTVALID", certValid);
         if (passwordValid && certValid) {
             setIsValid(true);
         } else {
@@ -57,7 +55,6 @@ const LoginScreen = ({
         setForm(prev => ({ ...prev, [key]: value }));
     }
     const handleOnImport = () => {
-        // Alert.alert("Error","Cert not valid");
         navigation.navigate('Home');
     }
     return (

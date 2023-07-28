@@ -13,14 +13,6 @@ type Props = {
 }
 const ElectionScreenStack = createNativeStackNavigator();
 
-// const electionData: ElectionCardProps = {
-//   electionDate: '2023-05-08T03:26:27.701Z',
-//   electionName: 'Mayoral Election',
-//   electionLocation: 'Banyumas, ID',
-//   electionTotal: 2343238
-// }
-
-
 
 const renderTabBar = (props: any) => (
   <TabBar
@@ -49,21 +41,23 @@ export default function ElectionScreens(props: Props) {
   ]);
 
   const onRefreshData = () => {
-    console.log("Refreshing")
     setRefreshing(true);
+    getData();
+
+  }
+
+  const getData = () => {
     GetElectionList()
-      .then((r) => setElectionList(r.data as Election[]))
+      .then((r) => {
+        setElectionList(r.data as Election[])
+      })
       .catch((e) => console.log(e))
       .finally(() => setRefreshing(false));
   }
 
 
   useEffect(() => {
-    // GetElectionList()
-    //   .then((r) => setElectionList(r.data as Election[]))
-    //   .catch((e) => console.log(e))
-    //   .finally(() => console.log("Election List Loaded"));
-    onRefreshData();
+    getData();
   }, []);
 
 
@@ -76,7 +70,7 @@ export default function ElectionScreens(props: Props) {
             return <ElectionTab
               electionDataList={electionList}
               refreshing={refreshing}
-              onRefresh={() => onRefreshData()}
+              onRefresh={onRefreshData}
               {...props}
             />
 
@@ -109,7 +103,7 @@ function ElectionTab({ navigation, electionDataList, refreshing, onRefresh }: El
       refreshControl={
         <RefreshControl
           refreshing={refreshing}
-          onRefresh={() => onRefresh}
+          onRefresh={onRefresh}
         />
       }
     >
