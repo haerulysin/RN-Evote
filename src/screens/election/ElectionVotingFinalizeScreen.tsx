@@ -1,15 +1,14 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Feather } from '@expo/vector-icons'
-import { NavigationProp } from '@react-navigation/native';
+import { ElectionStackParamList } from '../../types';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-type ElectionVotingSuccessScreenProps = {
-    navigation: NavigationProp<any, any>;
-}
+type Props = NativeStackScreenProps<ElectionStackParamList, 'ElectionVotingFinalize'>;
 
-const ElectionVotingSuccessScreen = ({navigation}: ElectionVotingSuccessScreenProps) => {
-
+const ElectionVotingSuccessScreen: React.FC<Props> = ({route, navigation}: Props) => {
+    // const {selectedCandidateID} = props.route.params;
 
     return (
         <SafeAreaView className='bg-bluechain h-screen w-screen flex flex-col justify-between'>
@@ -25,7 +24,7 @@ const ElectionVotingSuccessScreen = ({navigation}: ElectionVotingSuccessScreenPr
             </View>
 
             <View className='flex flex-col px-4 mb-20'>
-                <TouchableOpacity activeOpacity={0.7} className='flex items-center bg-gray-900 rounded-lg' onPress={() => { navigation.navigate('Election') }}>
+                <TouchableOpacity activeOpacity={0.7} className='flex items-center bg-gray-900 rounded-lg' onPress={() => console.log("Pressed")}>
                     <Text className='text-white p-3 text-lg'>Continue</Text>
                 </TouchableOpacity>
             </View>

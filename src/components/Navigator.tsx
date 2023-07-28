@@ -7,17 +7,17 @@ import ElectionVotingScreen from '../screens/election/ElectionVotingScreen';
 import ElectionScreens from '../screens/election/ElectionScreens';
 import { DefaultHeaderBar, DefaultHeaderTitle, FragmentHeaderBar } from './HeaderBar'
 import ElectionVotingConfirmationScreen from '../screens/election/ElectionVotingConfirmationScreen';
-import ElectionVotingSuccessScreen from '../screens/election/ElectionVotingSuccessScreen';
+import ElectionVotingSuccessScreen from '../screens/election/ElectionVotingFinalizeScreen';
 import SettingScreen from '../screens/profile/SettingScreen';
 import SettingShowCertScreen from '../screens/profile/SettingShowCertScreen';
 import LandingScreen from '../screens/LandingScreen';
 import LoginLandingScreen from '../screens/authpage/LoginLandingScreen';
 import LoginScreen from '../screens/authpage/LoginScreen';
 import RegisterScreen from '../screens/authpage/RegisterScreen';
-import React, { useEffect } from 'react';
+import React, { } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { ElectionStackParamList, RootStackParamList } from '../types';
-import { AuthContext, AuthContextProvider } from '../context/AuthContext';
+import { AuthContext } from '../context/AuthContext';
 
 const Tab = createBottomTabNavigator();
 const TabOpts = { headerShown: false, tabBarShowLabel: false }
@@ -27,7 +27,7 @@ export default function Navigator() {
     return (
         <NavigationContainer>
             < Stack.Navigator>
-                {authContext.uid === null  ? (
+                {authContext.uid === null ? (
                     <Stack.Group>
                         <Stack.Screen
                             name='LandingPage'
@@ -87,13 +87,7 @@ export default function Navigator() {
                             }}
                         />
                         <Stack.Screen name='Profile' component={TabNavigator} />
-                        <Stack.Screen
-                            name='ElectionVotingSuccess'
-                            component={ElectionVotingSuccessScreen}
-                            options={{
-                                headerShown: false
-                            }}
-                        />
+
 
                         <Stack.Screen
                             name='SettingShowCertificate'
@@ -172,7 +166,6 @@ const ElectionStackScreen = () => {
 
             <ElectionStack.Screen
                 name='ElectionDetail'
-                // component={ElectionDetailScreen}
                 component={ElectionDetailScreen}
                 options={{
                     header: (props) => <FragmentHeaderBar {...props} />
@@ -184,10 +177,9 @@ const ElectionStackScreen = () => {
             <ElectionStack.Screen
                 name='ElectionVoting'
                 component={ElectionVotingScreen}
-            // options={{
-            //     header: (props) => <FragmentCardHeaderBar {...props} />
-            // }}
             />
+
+
 
             <ElectionStack.Screen
                 name='ElectionVotingConfirmation'
@@ -200,6 +192,11 @@ const ElectionStackScreen = () => {
                         />
                     )
                 }}
+            />
+
+            <ElectionStack.Screen
+                name='ElectionVotingFinalize'
+                component={ElectionVotingSuccessScreen}
             />
 
         </ElectionStack.Navigator>

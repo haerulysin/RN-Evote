@@ -1,18 +1,21 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { NavigationProp } from '@react-navigation/native';
 import * as LocalAuthentication from 'expo-local-authentication';
 import biometricsAuth from '../../utils/localAuth';
 import { CandidatesCard } from '../../components/CandidatesRadio';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { ElectionStackParamList } from '../../types';
 
 
-type ElectionVotingConfirmationScreenProps = {
-    navigation: NavigationProp<any, any>;
-}
+type ElectionVotingConfirmationScreenProps = NativeStackScreenProps<ElectionStackParamList, 'ElectionVotingConfirmation'>;
 
-const ElectionVotingConfirmationScreen = (props: ElectionVotingConfirmationScreenProps) => {
+const ElectionVotingConfirmationScreen = ({ navigation, route }: ElectionVotingConfirmationScreenProps) => {
+    const { selectedCandidateID } = route.params;
 
-    const { navigation } = props;
+    useEffect(() => {
+        console.log(selectedCandidateID)
+    }, [])
 
     return (
         <View className='h-full w-full bg-white px-4'>
@@ -44,7 +47,7 @@ const ElectionVotingConfirmationScreen = (props: ElectionVotingConfirmationScree
             </View>
 
             <View className='mt-5'>
-                <TouchableOpacity className='bg-bluechain p-3 rounded-lg flex justify-center items-center' onPress={() => navigation.navigate('ElectionVotingSuccess')}>
+                <TouchableOpacity className='bg-bluechain p-3 rounded-lg flex justify-center items-center' onPress={() => console.log("Pressed")} >
                     <Text className='font-medium text-white text-lg'>Continue</Text>
                 </TouchableOpacity>
             </View>

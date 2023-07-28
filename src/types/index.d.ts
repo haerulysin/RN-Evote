@@ -2,7 +2,6 @@ export type RootStackParamList = {
   Register: undefined;
   Home: undefined;
   Profile: undefined;
-  ElectionVotingSuccess: undefined;
   SettingShowCertificate: undefined;
   LandingPage: undefined;
   Login: undefined;
@@ -13,7 +12,8 @@ export type ElectionStackParamList = {
   ElectionVoting: { electionID: string };
   Election: undefined;
   ElectionDetail: undefined;
-  ElectionVotingConfirmation: undefined;
+  ElectionVotingConfirmation: { selectedCandidateID: string; };
+  ElectionVotingFinalize: { selectedCandidateID: string; };
 
 }
 export type Election = {
