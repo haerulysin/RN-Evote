@@ -114,3 +114,10 @@ export type APIResponseType = {
   status: number
   data: object
 }
+
+export type JobsType = {
+  jobId:string;
+  transactionIds: string[];
+  transactionPayload?:string;
+  transactionError?:string;
+}

@@ -1,6 +1,6 @@
 import React, { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
 import ElectionCard from '../../components/ElectionCard';
-import { ScrollView, Button, View, Text, useWindowDimensions, RefreshControl } from 'react-native'
+import { ScrollView, Button, View, Text, useWindowDimensions, RefreshControl, Alert } from 'react-native'
 import { NavigationProp } from '@react-navigation/native';
 import { Election, ElectionCardProps } from '../../types';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -51,7 +51,7 @@ export default function ElectionScreens(props: Props) {
       .then((r) => {
         setElectionList(r.data as Election[])
       })
-      .catch((e) => console.log(e))
+      .catch((e) => Alert.alert("ERROR", e))
       .finally(() => setRefreshing(false));
   }
 
