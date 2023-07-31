@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
 import { MaterialIcons, AntDesign } from '@expo/vector-icons';
 import { styled } from 'nativewind';
-import CandidatesRadioButton from '../../components/CandidatesRadio';
+import CandidatesRadioButton from '../../components/CandidateRadio';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Candidate, Election, ElectionStackParamList } from '../../types';
 import { GetCandidateByElectionID, GetElectionByID, GetElectionList } from '../../utils/RESTApi';
@@ -49,6 +49,20 @@ const ElectionVotingScreen = (props: Props) => {
         setHeader();
     }, [electionData]);
 
+    const onSubmit = () => {
+        const selectedCandidateObject = candidateList.find(obj => obj.candidateID === pickedOption) as Candidate;
+        const paramsData = {
+            selectedCandidateID: pickedOption as string,
+            electionName: electionData?.electionName as string,
+            selectedCandidateObject: selectedCandidateObject,
+            electionID
+        }
+
+
+
+        props.navigation.navigate('ElectionVotingConfirmation', { ...paramsData })
+    }
+
     return (
         <View>
             <View className='flex items-center h-full pt-2 bg-gray-200'>
@@ -94,7 +108,7 @@ const ElectionVotingScreen = (props: Props) => {
                         <TouchableOpacity
                             disabled={pickedOption === null ? true : false}
                             className={` p-2 h-12 rounded-lg items-center ${pickedOption ? 'bg-bluechain' : 'bg-blue-300'}`}
-                            onPress={() => { props.navigation.navigate('ElectionVotingConfirmation', { selectedCandidateID: pickedOption as string }) }}
+                            onPress={onSubmit}
                         >
                             <Text className='text-white font-bold text-lg'>Confirm your Vote</Text>
                         </TouchableOpacity>

@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { AntDesign } from '@expo/vector-icons';
 import ElectionDetailScreen from '../screens/election/ElectionDetailScreen';
@@ -112,30 +112,22 @@ function TabNavigator() {
         >
 
             <Tab.Screen
-                name='Blocks'
-                component={ProfileStackScreen}
-                options={{
-                    ...TabOpts,
-                    tabBarActiveTintColor: '#25AAE1',
-                    tabBarIcon: ({ color, size }) => (
-                        <AntDesign name="CodeSandbox" size={size} color={color} />
-                    )
-
-
-                }}
-            />
-
-            <Tab.Screen
                 name='Elections'
                 component={ElectionStackScreen}
-                options={{
+                options={({ route }) => ({
                     ...TabOpts,
                     tabBarActiveTintColor: '#25AAE1',
                     tabBarIcon: ({ color, size }) => (
                         <AntDesign name='home' size={size} color={color} />
                     ),
-                }}
-
+                    tabBarStyle: ((route) => {
+                        const routeName = getFocusedRouteNameFromRoute(route) ?? ""
+                        if (routeName === 'ElectionVotingFinalize') {
+                            return { display: "none" }
+                        }
+                        return
+                    })(route),
+                })}
             />
             <Tab.Screen
                 name='Settings'
@@ -148,6 +140,20 @@ function TabNavigator() {
                     )
                 }}
             />
+
+            <Tab.Screen
+                name='Blocks'
+                component={ProfileStackScreen}
+                options={{
+                    ...TabOpts,
+                    tabBarActiveTintColor: '#25AAE1',
+                    tabBarIcon: ({ color, size }) => (
+                        <AntDesign name="CodeSandbox" size={size} color={color} />
+                    )
+
+
+                }}
+            />
         </Tab.Navigator>
     )
 }
@@ -155,7 +161,7 @@ function TabNavigator() {
 const ElectionStack = createStackNavigator<ElectionStackParamList>();
 const ElectionStackScreen = () => {
     return (
-        <ElectionStack.Navigator initialRouteName='Election' >
+        <ElectionStack.Navigator initialRouteName='Election'  >
             <ElectionStack.Screen
                 name='Election'
                 component={ElectionScreens}
@@ -197,6 +203,9 @@ const ElectionStackScreen = () => {
             <ElectionStack.Screen
                 name='ElectionVotingFinalize'
                 component={ElectionVotingSuccessScreen}
+                options={{
+                    headerShown: false,
+                }}
             />
 
         </ElectionStack.Navigator>

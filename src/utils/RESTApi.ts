@@ -4,26 +4,16 @@ import { APIResponseType, EnrollProcessResponse, EnrollResponse } from "../types
 import * as LocalStorage from './LocalStorage';
 
 const apiURL = process.env.EXPO_PUBLIC_API_URL;
-
-
-
-
 const getApiToken = async () => {
     return await LocalStorage.get('uid');
 }
 
 export const pingCC = async (uid: string) => {
-    const fetchEnroll = await fetch(`${apiURL}/auth/pingn`, {
-        headers: {
-            'x-api-key': uid
-        }
-    });
-
+    const fetchEnroll = await fetch(`${apiURL}/auth/ping`, { headers: { 'x-api-key': uid } });
     return {
         status: fetchEnroll.status,
         data: await fetchEnroll.json()
     };
-
 }
 export const enrollIdentities = async (data: string): Promise<APIResponseType> => {
 
@@ -93,3 +83,33 @@ export const GetCandidateByElectionID = async (electionID: string): Promise<APIR
 }
 
 
+export const PostCastVote = async (pickedID: string, electionID: string): Promise<APIResponseType> => {
+    const castVote = await fetch(`${apiURL}/ballot`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': await getApiToken()
+        },
+        body: JSON.stringify({ pickedID, electionID })
+    });
+
+    return {
+        status: castVote.status,
+        data: await castVote.json()
+    }
+}
+
+export const GetJobData = async (jobId: string): Promise<APIResponseType> => {
+    const getjob = await fetch(`${apiURL}/jobs/${jobId}`, {
+        headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': await getApiToken()
+        }
+    });
+
+    return{
+        status: getjob.status,
+        data: await getjob.json()
+    }
+
+}

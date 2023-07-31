@@ -12,8 +12,8 @@ export type ElectionStackParamList = {
   ElectionVoting: { electionID: string };
   Election: undefined;
   ElectionDetail: undefined;
-  ElectionVotingConfirmation: { selectedCandidateID: string; };
-  ElectionVotingFinalize: { selectedCandidateID: string; };
+  ElectionVotingConfirmation: { selectedCandidateID: string, electionName:string, selectedCandidateObject:Candidate, electionID:string };
+  ElectionVotingFinalize: { selectedCandidateID: string;  electionID:string};
 
 }
 export type Election = {
