@@ -16,6 +16,13 @@ export type ElectionStackParamList = {
   ElectionVotingFinalize: { selectedCandidateID: string;  electionID:string};
 
 }
+
+export type TransactionStackParamList = {
+
+  TransactionListScreen:undefined;
+
+}
+
 export type Election = {
   electionID?: string;
   electionName: string;

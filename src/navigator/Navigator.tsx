@@ -5,7 +5,7 @@ import { AntDesign } from '@expo/vector-icons';
 import ElectionDetailScreen from '../screens/election/ElectionDetailScreen';
 import ElectionVotingScreen from '../screens/election/ElectionVotingScreen';
 import ElectionScreens from '../screens/election/ElectionScreens';
-import { DefaultHeaderBar, DefaultHeaderTitle, FragmentHeaderBar } from './HeaderBar'
+import { DefaultHeaderBar, DefaultHeaderTitle, FragmentHeaderBar } from '../components/HeaderBar'
 import ElectionVotingConfirmationScreen from '../screens/election/ElectionVotingConfirmationScreen';
 import ElectionVotingSuccessScreen from '../screens/election/ElectionVotingFinalizeScreen';
 import SettingScreen from '../screens/profile/SettingScreen';
@@ -18,9 +18,9 @@ import React, { } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { ElectionStackParamList, RootStackParamList } from '../types';
 import { AuthContext } from '../context/AuthContext';
+import TabNavigator from './TabNavigator';
 
-const Tab = createBottomTabNavigator();
-const TabOpts = { headerShown: false, tabBarShowLabel: false }
+
 const Stack = createStackNavigator<RootStackParamList>();;
 export default function Navigator() {
     const authContext = React.useContext(AuthContext) as any;
@@ -104,127 +104,3 @@ export default function Navigator() {
         </NavigationContainer >
     )
 }
-
-function TabNavigator() {
-    return (
-        <Tab.Navigator
-
-        >
-
-            <Tab.Screen
-                name='Elections'
-                component={ElectionStackScreen}
-                options={({ route }) => ({
-                    ...TabOpts,
-                    tabBarActiveTintColor: '#25AAE1',
-                    tabBarIcon: ({ color, size }) => (
-                        <AntDesign name='home' size={size} color={color} />
-                    ),
-                    tabBarStyle: ((route) => {
-                        const routeName = getFocusedRouteNameFromRoute(route) ?? ""
-                        if (routeName === 'ElectionVotingFinalize') {
-                            return { display: "none" }
-                        }
-                        return
-                    })(route),
-                })}
-            />
-            <Tab.Screen
-                name='Settings'
-                component={ProfileStackScreen}
-                options={{
-                    ...TabOpts,
-                    tabBarActiveTintColor: '#25AAE1',
-                    tabBarIcon: ({ color, size }) => (
-                        <AntDesign name="setting" size={size} color={color} />
-                    )
-                }}
-            />
-
-            <Tab.Screen
-                name='Blocks'
-                component={ProfileStackScreen}
-                options={{
-                    ...TabOpts,
-                    tabBarActiveTintColor: '#25AAE1',
-                    tabBarIcon: ({ color, size }) => (
-                        <AntDesign name="CodeSandbox" size={size} color={color} />
-                    )
-
-
-                }}
-            />
-        </Tab.Navigator>
-    )
-}
-
-const ElectionStack = createStackNavigator<ElectionStackParamList>();
-const ElectionStackScreen = () => {
-    return (
-        <ElectionStack.Navigator initialRouteName='Election'  >
-            <ElectionStack.Screen
-                name='Election'
-                component={ElectionScreens}
-                options={{
-                    header: (props) => <DefaultHeaderBar {...props} />
-                }}
-            />
-
-            <ElectionStack.Screen
-                name='ElectionDetail'
-                component={ElectionDetailScreen}
-                options={{
-                    header: (props) => <FragmentHeaderBar {...props} />
-
-                }}
-
-            />
-
-            <ElectionStack.Screen
-                name='ElectionVoting'
-                component={ElectionVotingScreen}
-            />
-
-
-
-            <ElectionStack.Screen
-                name='ElectionVotingConfirmation'
-                component={ElectionVotingConfirmationScreen}
-                options={{
-                    header: (props) => (
-                        <FragmentHeaderBar
-                            {...props}
-                            backTitle='Cancel'
-                        />
-                    )
-                }}
-            />
-
-            <ElectionStack.Screen
-                name='ElectionVotingFinalize'
-                component={ElectionVotingSuccessScreen}
-                options={{
-                    headerShown: false,
-                }}
-            />
-
-        </ElectionStack.Navigator>
-    )
-}
-
-export const ProfileStack = createNativeStackNavigator();
-const ProfileStackScreen = () => (
-    <ProfileStack.Navigator>
-        <ProfileStack.Screen
-            name='Setting'
-            component={SettingScreen}
-            options={({ navigation, route }) => ({
-                headerTitleAlign: 'center',
-                // headerLeft: () => (<Text className='text-bluechain' onPress={navigation.goBack}>Cancel</Text>)
-            })}
-        />
-
-    </ProfileStack.Navigator>
-)
-
-

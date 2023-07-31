@@ -11,7 +11,6 @@ import { GetElectionList } from '../../utils/RESTApi';
 type Props = {
   navigation: NavigationProp<any, any>
 }
-const ElectionScreenStack = createNativeStackNavigator();
 
 
 const renderTabBar = (props: any) => (

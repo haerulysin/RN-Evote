@@ -1,7 +1,7 @@
 import { NativeWindStyleSheet } from "nativewind";
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import Navigator from './src/components/Navigator';
+import Navigator from './src/navigator/Navigator';
 import React from "react";
 import { AuthContextProvider } from "./src/context/AuthContext";
 NativeWindStyleSheet.setOutput({
