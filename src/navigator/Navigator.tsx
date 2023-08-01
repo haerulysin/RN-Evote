@@ -1,14 +1,5 @@
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, getFocusedRouteNameFromRoute } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { AntDesign } from '@expo/vector-icons';
-import ElectionDetailScreen from '../screens/election/ElectionDetailScreen';
-import ElectionVotingScreen from '../screens/election/ElectionVotingScreen';
-import ElectionScreens from '../screens/election/ElectionScreens';
-import { DefaultHeaderBar, DefaultHeaderTitle, FragmentHeaderBar } from '../components/HeaderBar'
-import ElectionVotingConfirmationScreen from '../screens/election/ElectionVotingConfirmationScreen';
-import ElectionVotingSuccessScreen from '../screens/election/ElectionVotingFinalizeScreen';
-import SettingScreen from '../screens/profile/SettingScreen';
+import { DefaultHeaderTitle } from '../components/HeaderBar'
 import SettingShowCertScreen from '../screens/profile/SettingShowCertScreen';
 import LandingScreen from '../screens/LandingScreen';
 import LoginLandingScreen from '../screens/authpage/LoginLandingScreen';
@@ -16,7 +7,7 @@ import LoginScreen from '../screens/authpage/LoginScreen';
 import RegisterScreen from '../screens/authpage/RegisterScreen';
 import React, { } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { ElectionStackParamList, RootStackParamList } from '../types';
+import { RootStackParamList } from '../types';
 import { AuthContext } from '../context/AuthContext';
 import TabNavigator from './TabNavigator';
 

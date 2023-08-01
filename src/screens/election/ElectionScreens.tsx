@@ -1,11 +1,9 @@
-import React, { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ElectionCard from '../../components/ElectionCard';
-import { ScrollView, Button, View, Text, useWindowDimensions, RefreshControl, Alert } from 'react-native'
+import { ScrollView,  View, Text, useWindowDimensions, RefreshControl, Alert } from 'react-native'
 import { NavigationProp } from '@react-navigation/native';
-import { Election, ElectionCardProps } from '../../types';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
-import * as LocalStorage from '../../utils/LocalStorage';
+import { Election } from '../../types';
+import { TabView, TabBar } from 'react-native-tab-view';
 import { GetElectionList } from '../../utils/RESTApi';
 
 type Props = {

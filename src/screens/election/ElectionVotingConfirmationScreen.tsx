@@ -39,11 +39,11 @@ const ElectionVotingConfirmationScreen = ({ navigation, route }: ElectionVotingC
                 <Text className='text-sm opacity-40'>Please enter passcode to confirm your choice</Text>
             </View>
 
-            <View className='flex justify-center items-center h-32 mt-10'>
+            {/* <View className='flex justify-center items-center h-32 mt-10'>
                 <Text>FACEID LOGO HERE</Text>
-            </View>
+            </View> */}
 
-            <View className='flex flex-col justify-center items-center w-full '>
+            <View className='flex flex-col justify-center items-center w-full mt-24 '>
                 <Text className='font-medium opacity-50'>Voting for</Text>
                 <Text className='font-bold pb-4'>{electionName}</Text>
                 <CandidatesCardWrapper confirmationCard>

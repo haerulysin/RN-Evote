@@ -2,9 +2,14 @@ import React, { FC, useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Feather } from '@expo/vector-icons'
-import { APIResponseType, ElectionStackParamList, JobsType } from '../../types';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { GetJobData, PostCastVote } from '../../utils/RESTApi';
+import * as Clipboard from 'expo-clipboard';
+import Toast from 'react-native-root-toast';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ElectionStackParamList, JobsType, APIResponseType } from '../../types';
+import { StorageKey } from '../../types/enum';
+
 type Props = NativeStackScreenProps<ElectionStackParamList, 'ElectionVotingFinalize'>;
 const ElectionVotingSuccessScreen: FC<Props> = ({ route, navigation }: Props) => {
     const { selectedCandidateID, electionID } = route.params;
@@ -22,6 +27,17 @@ const ElectionVotingSuccessScreen: FC<Props> = ({ route, navigation }: Props) =>
         return setJobsID(null);
     }, []);
 
+    const storeTxID = async (newTx: string) => {
+        let getTx = await AsyncStorage.getItem(StorageKey.TXList);
+        if (getTx === null) {
+            await AsyncStorage.setItem(StorageKey.TXList, JSON.stringify([newTx]));
+        } else {
+            let txObject = JSON.parse(getTx);
+            txObject.push(newTx);
+            txObject = txObject.filter((v: any, i: any) => txObject.indexOf(v) === i);
+            await AsyncStorage.setItem(StorageKey.TXList, JSON.stringify(txObject));
+        }
+    }
 
     useEffect(() => {
         if (jobsID !== null) {
@@ -30,10 +46,11 @@ const ElectionVotingSuccessScreen: FC<Props> = ({ route, navigation }: Props) =>
                     .then((r: APIResponseType) => {
                         const data = r.data as JobsType;
                         if (data.transactionError) {
-                            Alert.alert("Transaction Error", data.transactionError,[{text:"Continue", onPress:() => navigation.navigate('ElectionVoting',{electionID})}] );
+                            Alert.alert("Transaction Error", data.transactionError, [{ text: "Continue", onPress: () => navigation.navigate('ElectionVoting', { electionID }) }]);
                             clearInterval(fetchJobs);
                         } else if (data.transactionPayload && !data.transactionError) {
                             setCastData(data);
+                            storeTxID(data.transactionIds[0]);
                             setIsLoading(false);
                             clearInterval(fetchJobs);
                         }
@@ -48,6 +65,14 @@ const ElectionVotingSuccessScreen: FC<Props> = ({ route, navigation }: Props) =>
     const onContinue = () => {
         navigation.navigate('Election');
     }
+
+    const onPressTxID = () => {
+        if (!isLoading) {
+            Clipboard.setStringAsync(castData?.transactionIds[0] as string);
+            Toast.show("TX ID copied to clipboard");
+        }
+    }
+
     return (
         <SafeAreaView className='bg-bluechain h-screen w-screen flex flex-col justify-between'>
 
@@ -65,7 +90,7 @@ const ElectionVotingSuccessScreen: FC<Props> = ({ route, navigation }: Props) =>
                         {isLoading ? 'Invoking Transaction...' : 'Transaction ID'}
                     </Text>
                 </View>
-                <Text className='text-white w-11/12 px-4 text-center'>
+                <Text className='text-white w-11/12 px-4 text-center' onPress={onPressTxID} >
                     {isLoading ? 'Invoking your trransaction to the ledger' : castData?.transactionIds[0]}
                 </Text>
             </View>

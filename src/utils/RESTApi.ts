@@ -107,9 +107,38 @@ export const GetJobData = async (jobId: string): Promise<APIResponseType> => {
         }
     });
 
-    return{
+    return {
         status: getjob.status,
         data: await getjob.json()
     }
 
+}
+
+
+export const GetTXData = async (txId: string): Promise<APIResponseType> => {
+    const getTx = await fetch(`${apiURL}/transaction/${txId}`, {
+        headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': await getApiToken()
+        }
+    });
+
+    return {
+        status: getTx.status,
+        data: await getTx.json()
+    }
+}
+
+export const GetMyBallot = async (): Promise<APIResponseType> => {
+    const getBallot = await fetch(`${apiURL}/ballot`, {
+        headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': await getApiToken()
+        }
+    });
+
+    return {
+        status: getBallot.status,
+        data: await getBallot.json()
+    }
 }

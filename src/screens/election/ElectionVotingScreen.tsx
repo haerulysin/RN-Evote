@@ -1,12 +1,13 @@
 import React, { FC, useEffect, useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, RefreshControl, Alert } from 'react-native';
 import { MaterialIcons, AntDesign } from '@expo/vector-icons';
 import { styled } from 'nativewind';
 import CandidatesRadioButton from '../../components/CandidateRadio';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Candidate, Election, ElectionStackParamList } from '../../types';
-import { GetCandidateByElectionID, GetElectionByID, GetElectionList } from '../../utils/RESTApi';
+import { Ballot, Candidate, Election, ElectionStackParamList } from '../../types';
+import { GetElectionByID, GetMyBallot } from '../../utils/RESTApi';
 import { FragmentCardHeaderBar } from '../../components/HeaderBar';
+import { CheckBallot } from '../../utils/helper';
 
 type Props = NativeStackScreenProps<ElectionStackParamList, 'ElectionVoting'>;
 const StyledView = styled(View, 'flex flex-row justify-center items-center opacity-50');
@@ -14,6 +15,7 @@ const ElectionVotingScreen = (props: Props) => {
     const [pickedOption, setPickedOption] = useState<string | null>(null);
     const [electionData, setElectionData] = useState<Election>();
     const [candidateList, setCandidateList] = useState<Candidate[]>([]);
+    const [ballot, setBallot] = useState<Ballot>();
     const [refreshing, setRefreshing] = useState<boolean>(false);
     const { electionID } = props.route.params;
 
@@ -23,18 +25,27 @@ const ElectionVotingScreen = (props: Props) => {
                 if (r.status === 200) {
                     setElectionData(r.data as Election);
                     setCandidateList((r.data as any).candidateList);
+                    CheckBallot();
+
                 }
             })
-            .catch(e => console.log(e))
+            .catch(e => Alert.alert("ERROR", e))
             .finally(() => setRefreshing(false));
+    }
+
+
+    const getMyBallot = async () => {
+        const ballotList = await GetMyBallot();
+        const currentBallot = (ballotList.data as any[]).filter(obj => obj.electionID === electionID)[0];
+        setBallot(currentBallot);
     }
 
 
     useEffect(() => {
         getElectionData();
+        getMyBallot();
     }, []);
 
-    //Set Header While electionData available;
     useEffect(() => {
         const setHeader = () => {
             props.navigation.setOptions({
@@ -45,7 +56,6 @@ const ElectionVotingScreen = (props: Props) => {
                 />
             });
         }
-
         setHeader();
     }, [electionData]);
 
@@ -57,9 +67,6 @@ const ElectionVotingScreen = (props: Props) => {
             selectedCandidateObject: selectedCandidateObject,
             electionID
         }
-
-
-
         props.navigation.navigate('ElectionVotingConfirmation', { ...paramsData })
     }
 
@@ -100,6 +107,7 @@ const ElectionVotingScreen = (props: Props) => {
                             pickedOption={pickedOption}
                             setPickedOption={setPickedOption}
                             candidateList={candidateList}
+                            isDisabled={ballot?.isCasted}
                         />
                     </View>
 
@@ -110,7 +118,7 @@ const ElectionVotingScreen = (props: Props) => {
                             className={` p-2 h-12 rounded-lg items-center ${pickedOption ? 'bg-bluechain' : 'bg-blue-300'}`}
                             onPress={onSubmit}
                         >
-                            <Text className='text-white font-bold text-lg'>Confirm your Vote</Text>
+                            <Text className='text-white font-bold text-lg'>{ballot?.isCasted ? 'Already Casted' : 'Confirm your Vote'}</Text>
                         </TouchableOpacity>
                     </View>
                 </ScrollView>

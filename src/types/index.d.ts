@@ -12,15 +12,14 @@ export type ElectionStackParamList = {
   ElectionVoting: { electionID: string };
   Election: undefined;
   ElectionDetail: undefined;
-  ElectionVotingConfirmation: { selectedCandidateID: string, electionName:string, selectedCandidateObject:Candidate, electionID:string };
-  ElectionVotingFinalize: { selectedCandidateID: string;  electionID:string};
+  ElectionVotingConfirmation: { selectedCandidateID: string, electionName: string, selectedCandidateObject: Candidate, electionID: string };
+  ElectionVotingFinalize: { selectedCandidateID: string; electionID: string };
 
 }
 
 export type TransactionStackParamList = {
-
-  TransactionListScreen:undefined;
-
+  TransactionList: undefined;
+  TransactionDetail: { txId: string, txData: string };
 }
 
 export type Election = {
@@ -118,13 +117,13 @@ export type EnrollProcessResponse = EnrollResponse & {
 }
 
 export type APIResponseType = {
-  status: number
-  data: object
+  status: number;
+  data: object|any;
 }
 
 export type JobsType = {
-  jobId:string;
+  jobId: string;
   transactionIds: string[];
-  transactionPayload?:string;
-  transactionError?:string;
+  transactionPayload?: string;
+  transactionError?: string;
 }

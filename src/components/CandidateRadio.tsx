@@ -9,15 +9,16 @@ type CandidatesProp = {
     pickedOption: string | null;
     setPickedOption: Dispatch<SetStateAction<string | null>>;
     candidateList: Candidate[];
+    isDisabled?:boolean;
 }
 
-const CandidatesRadioButton = ({ pickedOption, setPickedOption, candidateList }: CandidatesProp) => {
+const CandidatesRadioButton = ({ pickedOption, setPickedOption, candidateList, isDisabled }: CandidatesProp) => {
     return (
         <View>
             {candidateList.map((item: Candidate) => {
                 return (
                     <CandidatesCardWrapper key={item.candidateID}>
-                        <TouchableOpacity onPress={() => setPickedOption!(item.candidateID as string)}>
+                        <TouchableOpacity  onPress={() => setPickedOption!(item.candidateID as string)} disabled={isDisabled} >
                             <CandidateCard
                                 candidateID={item.candidateID}
                                 candidateName={item.candidateName}
