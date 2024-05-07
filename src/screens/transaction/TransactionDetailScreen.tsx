@@ -12,7 +12,6 @@ const TransactionDetailScreen: FC<TransactionDetailScreenProps> = ({ route, navi
     const data = JSON.parse(txData);
     useEffect(() => {
         navigation.setOptions({ title: txId });
-        console.log();
     }, [])
     return (
         <ScrollView className='bg-white'>

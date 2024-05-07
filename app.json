@@ -26,8 +26,10 @@
         "backgroundColor": "#ffffff"
       },
       "permissions": [
-        "android.permission.USE_BIOMETRIC"
-      ]
+        "android.permission.USE_BIOMETRIC",
+        "android.permission.USE_FINGERPRINT"
+      ],
+      "package": "com.haerulysin.evote"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -39,6 +41,11 @@
           "faceIDPermission": "Allow $(PRODUCT_NAME) to use Face ID."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "43b45842-001e-44a0-8bbb-1c1b84aa15dc"
+      }
+    }
   }
 }

@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { ButtonGroupWithText, SwitchGroupWithText } from '../../components/SettingButton';
 import { NavigationProp } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
+import { AuthContext } from '../../context/AuthContext';
 
 type SettingScreenProps = {
     navigation: NavigationProp<any, any>
@@ -12,6 +13,10 @@ const SettingScreen = (props: SettingScreenProps) => {
     const [biometricEnabled, setBiometricEnabled] = useState<boolean>(false);
     const [passcodeEnabled, setPasscodeEnabled] = useState<boolean>(false);
 
+    const authContext = React.useContext(AuthContext) as any;
+    const onLogout = () => {
+        authContext.signOut();
+    }
     return (
         <View className='bg-white h-screen px-4 pt-6'>
 
@@ -41,7 +46,7 @@ const SettingScreen = (props: SettingScreenProps) => {
 
             <TouchableOpacity
                 className='h-12 bg-red-500 rounded-md items-center justify-center'
-                onPress={() => props.navigation.navigate('LoginLanding')}
+                onPress={onLogout}
             >
                 <Text>Logout</Text>
             </TouchableOpacity>

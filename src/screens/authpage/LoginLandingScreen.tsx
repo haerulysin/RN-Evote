@@ -10,8 +10,6 @@ type LoginLandingScreenProps = {
 }
 
 const LoginLandingScreen = ({ navigation }: LoginLandingScreenProps) => {
-
-
     return (
         <SafeAreaView className='bg-white h-full'>
             <View className='flex h-full w-full justify-between items-center '>

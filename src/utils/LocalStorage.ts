@@ -14,7 +14,6 @@ export async function store(
     let result = { status: 200 };
     return result;
   } catch (e) {
-    console.log(e)
     const result = { status: 400, message: e };
     return result;
   }
@@ -25,6 +24,11 @@ export async function get(key: string | any):Promise<any> {
     const value = await AsyncStorage.getItem(key);
     return value;
   } catch (e) {
-    console.log(e);
   }
+}
+
+export async function remove(key:string):Promise<any>{
+  try{
+    const remove = await AsyncStorage.removeItem("uid");
+  }catch(e){console.log(e)}
 }

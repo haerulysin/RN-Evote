@@ -3,10 +3,14 @@ import { View, Text, ScrollView, TextInput, Alert, Switch, Button } from 'react-
 import BiometricAuth from '../../utils/localAuth';
 import Input from '../../components/Input';
 import { NavigationProp } from '@react-navigation/native';
-
+import * as Crypto from 'expo-crypto';
+import * as SecureStore from 'expo-secure-store';
+import * as LocalStorage from '../../utils/LocalStorage';
+import { Login } from '../../utils/RESTApi';
+import { AuthContext } from '../../context/AuthContext';
 
 type LoginScreenProps = {
-    navigation: NavigationProp<any,any>;
+    navigation: NavigationProp<any, any>;
 }
 
 type LoginFormTypes = {
@@ -17,7 +21,7 @@ type LoginFormTypes = {
 }
 const LoginScreen = ({
     navigation
-}:LoginScreenProps) => {
+}: LoginScreenProps) => {
     const initialForm: LoginFormTypes = {
         password: '',
         passwordConfirmation: '',
@@ -40,7 +44,7 @@ const LoginScreen = ({
         }
     }
     const validate = () => {
-        const passwordValid = (form.password === form.passwordConfirmation) && form.password.length >= 8;
+        const passwordValid = (form.password === form.passwordConfirmation) && form.password.length >= 1;
         const certValid = (form.certificate.length > 1) && form.privateKey.length > 1;
 
         if (passwordValid && certValid) {
@@ -50,12 +54,32 @@ const LoginScreen = ({
         }
 
     }
-    useEffect(()=>{validate()})
+    useEffect(() => { validate() })
     const handleOnInputChange = (value: string | any, key: string | any) => {
         setForm(prev => ({ ...prev, [key]: value }));
     }
-    const handleOnImport = () => {
-        navigation.navigate('Home');
+    const authContext = React.useContext(AuthContext) as any;
+
+    const handleOnImport = async () => {
+        // navigation.navigate('Home');
+        const certString = JSON.stringify({ certificate: form.certificate, privateKey: form.privateKey });
+        try {
+            await LocalStorage.store("cert", certString);
+            await SecureStore.setItemAsync("cert", certString);
+            const passwordHash = await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, form.password);
+            await LocalStorage.store("inAppPassword", passwordHash);
+            await SecureStore.setItemAsync("inAppPassword", passwordHash);
+            const loginRequest = await Login(await SecureStore.getItemAsync("cert") as string) as any;
+            if (loginRequest.status === 200) {
+                const { uid } = loginRequest.data;
+                authContext.signIn(uid);
+            } else {
+                Alert.alert("Error", loginRequest.data.message);
+            }
+        } catch (e) {
+            Alert.alert("ERROR", e as any);
+        }
+
     }
     return (
         <ScrollView className='bg-white'>
@@ -106,7 +130,7 @@ const LoginScreen = ({
                 // setShowTextEntry={setShowTextEntry}
                 />
 
-                <View className='flex flex-row justify-between items-center mt-3'>
+                {/* <View className='flex flex-row justify-between items-center mt-3'>
                     <Text className='text-md font-medium'>Sign in with Biometric?</Text>
                     <Switch
                         thumbColor={biometricIsEnabled ? '#f9f9f9' : '#25AAE1'}
@@ -114,13 +138,15 @@ const LoginScreen = ({
                         onValueChange={handleOnBiometricOptionChange}
                         value={biometricIsEnabled}
                     />
-                </View>
+                </View> */}
 
-                <Button
-                    title='Import'
-                    disabled={!isValid}
-                    onPress={handleOnImport}
-                />
+                <View className='mt-4 mb-4'>
+                    <Button
+                        title='Import'
+                        disabled={!isValid}
+                        onPress={handleOnImport}
+                    />
+                </View>
 
             </View>
 

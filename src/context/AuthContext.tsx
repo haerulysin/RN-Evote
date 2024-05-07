@@ -2,6 +2,7 @@ import React, { createContext, useContext } from "react";
 import * as SecureStore from 'expo-secure-store';
 import * as LocalStorage from '../utils/LocalStorage';
 import { Login, pingCC } from "../utils/RESTApi";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 type Props = {
     children: string | JSX.Element | JSX.Element[];
 }
@@ -69,7 +70,13 @@ export const AuthContextProvider = ({ children }: Props) => {
                 await LocalStorage.store("uid", data);
                 dispatch({ type: 'SIGN_IN', uid: data as string });
             },
-            signOut: () => dispatch({ type: 'SIGN_OUT' }),
+            signOut: async() => {
+                await SecureStore.deleteItemAsync('uid');
+                await LocalStorage.remove("uid");
+                await AsyncStorage.removeItem("cert");
+                await SecureStore.deleteItemAsync("cert");
+                dispatch({ type: 'SIGN_OUT' });
+            },
             signUp: async (data: any) => {
                 dispatch({ type: 'SIGN_IN', uid: data });
             },

@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, RefreshControl, Alert } from 'react-native';
 import { MaterialIcons, AntDesign } from '@expo/vector-icons';
 import { styled } from 'nativewind';
@@ -7,7 +7,6 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Ballot, Candidate, Election, ElectionStackParamList } from '../../types';
 import { GetElectionByID, GetMyBallot } from '../../utils/RESTApi';
 import { FragmentCardHeaderBar } from '../../components/HeaderBar';
-import { CheckBallot } from '../../utils/helper';
 
 type Props = NativeStackScreenProps<ElectionStackParamList, 'ElectionVoting'>;
 const StyledView = styled(View, 'flex flex-row justify-center items-center opacity-50');
@@ -25,8 +24,6 @@ const ElectionVotingScreen = (props: Props) => {
                 if (r.status === 200) {
                     setElectionData(r.data as Election);
                     setCandidateList((r.data as any).candidateList);
-                    CheckBallot();
-
                 }
             })
             .catch(e => Alert.alert("ERROR", e))
